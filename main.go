@@ -1,20 +1,12 @@
 package main
 
-import "github.com/gin-gonic/gin"
-
-import "api.card-deck/views"
+import "api.card-deck/controllers"
 
 
 // app entry
 
 func main () {
-	// gin router instance
+	// run server
 
-	router := gin.Default()
-
-  router.POST("/create-deck", views.CreateDeck) // `CreateDeck` endpoint
-  router.GET("/open-deck/:deck_id", views.OpenDeck) // `OpenDeck` endpoint
-  router.GET("/draw-card", views.DrawCard) // `DrawCard` endoint
-
-  router.Run("localhost:8080") // server router on port 8080
+  controllers.InitRouter()
 }
