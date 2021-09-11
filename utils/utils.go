@@ -32,14 +32,3 @@ func StringInSlice(array []string, target string) bool {
 	// `target` not found -> `targte is not in array`
 	return false
 }
-
-
-func ArrayStrComp(array []string, target string) bool {
-	for i := 0; i < len(array); i++ {
-		if (strings.Compare(array[i], target) == 0) {
-			return true
-		}
-	}
-
-	return false
-}

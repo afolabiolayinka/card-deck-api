@@ -58,16 +58,30 @@ func CreateDeck (c *gin.Context) {
 	// - `shuffled` -> bool -> if the deck has been shuffled or not
 	// - `Remaining` -> int -> length of cards available in deck
 
-	var new_deck Deck = Deck {
-		Deck_id: utils.GenerateUniqueUUID(),
+	// generate new UUID for `deck_id`
+
+	var new_deck_id string = utils.GenerateUniqueUUID()
+
+	// deck to be added to `decks`
+
+	var __new_deck Deck = Deck {
+		Deck_id: new_deck_id,
 		Cards: cards,
 		Shuffled: false,
 		Remaining: len(cards),
 	}
 
-	// add `new_deck` to `decks`
+	// add `__new_deck` to `decks`
 
-	decks = append(decks, new_deck)
+	decks = append(decks, __new_deck)
+
+	// `decks` to be returned in response
+
+	var new_deck Deck = Deck {
+		Deck_id: new_deck_id,
+		Shuffled: false,
+		Remaining: len(cards),
+	}
 
 	// return `new_deck` as reponse to endpoint
 
@@ -146,9 +160,15 @@ func DrawCard (c *gin.Context) {
     		cards = append(cards, deck.Cards[card_index])
     	}
 
-    	// return list of cards
+    	// create instance of `ProxyDeck` model using array -> `cards`
 
-    	c.IndentedJSON(http.StatusOK, cards)
+    	cards_proxy := ProxyDeck {
+    		Cards: cards,
+    	}
+
+    	// return `cards` as `cards_proxy` model
+
+    	c.IndentedJSON(http.StatusOK, cards_proxy)
     	return
     }
   }
