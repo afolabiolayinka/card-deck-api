@@ -2,7 +2,6 @@ package views
 
 
 import "net/http"
-import "fmt"
 import "strconv"
 
 import "github.com/gin-gonic/gin"
@@ -83,19 +82,12 @@ func OpenDeck (c *gin.Context) {
 
 	deck_id := c.Param("deck_id")
 
-	// check if the deck_id length greater than zero, if not raise `StatusBadRequest` -> `bad_request`
-
-	if (len(deck_id) <= 0) {
-		c.IndentedJSON(http.StatusBadRequest, gin.H {"bad_request": "Deck ID is required"})
-		return
-	}
-
 	// linear search for deck using `deck_id`
 
 	for _, deck := range decks {
     if deck.Deck_id == deck_id {
-        c.IndentedJSON(http.StatusOK, deck)
-        return
+      c.IndentedJSON(http.StatusOK, deck)
+      return
     }
   }
 
@@ -135,6 +127,15 @@ func DrawCard (c *gin.Context) {
 
 	for _, deck := range decks {
     if deck.Deck_id == deck_id {
+
+    	// check if `count` exceeds the length of cards in deck
+    	// - raise `StatusBadRequest` -> 'bad_request' if count limit is exceeded
+
+    	var count_exceeds_deck_cards bool = count > len(deck.Cards)
+    	if (count_exceeds_deck_cards) {
+    		c.IndentedJSON(http.StatusBadRequest, gin.H {"bad_request": "Card count exceeded"})
+    		return
+    	}
 
     	// get cards of length of query parameter value of `count`
 

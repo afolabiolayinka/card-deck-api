@@ -45,7 +45,7 @@ func CreateSuit (card_type string, args ...string) []Card {
 		_suit := strings.ToUpper(card_type)
 		_code := _value + _suit[0:1]
 
-		if (utils.ArrayStrComp(lettered_cards, __deck_cards[card])) {
+		if (utils.StringInSlice(lettered_cards, __deck_cards[card])) {
 			_code = _value[0:1] + _suit[0:1]
 		}
 
