@@ -1,6 +1,6 @@
 package main
 
-import "api.card-deck/router"
+import "api/card-deck-api/router"
 
 
 // app entry
