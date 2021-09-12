@@ -1,6 +1,6 @@
 package main
 
-import "api.card-deck/controllers"
+import "api.card-deck/router"
 
 
 // app entry
@@ -8,5 +8,5 @@ import "api.card-deck/controllers"
 func main () {
 	// run server
 
-  controllers.SetupRouter().Run("localhost:8080")
+  router.SetupRouter().Run("localhost:8080")
 }

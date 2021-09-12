@@ -1,4 +1,4 @@
-module api.card-deck/controllers
+module api.card-deck/router
 
 go 1.16
 
