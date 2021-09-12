@@ -7,7 +7,7 @@ import "api.card-deck/views"
 
 // mode -> developement (true) / production (false)
 
-const DEBUG bool = false
+const DEBUG bool = true
 
 
 func SetupRouter () *gin.Engine {
