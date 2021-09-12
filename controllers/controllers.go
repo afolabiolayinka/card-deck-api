@@ -5,7 +5,18 @@ import "github.com/gin-gonic/gin"
 import "api.card-deck/views"
 
 
-func InitRouter () {
+// mode -> developement (true) / production (false)
+
+const DEBUG bool = false
+
+
+func SetupRouter () *gin.Engine {
+	// set DEBUG mode to production / developement
+
+	if !DEBUG {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	// gin router instance
 
 	routes := gin.Default()
@@ -14,5 +25,5 @@ func InitRouter () {
 	routes.GET("/open-deck/:deck_id", views.OpenDeck) // `OpenDeck` endpoint
 	routes.GET("/draw-card", views.DrawCard) // `DrawCard` endoint
 
-	routes.Run("localhost:8080") // server on port 8080
+	return routes
 }

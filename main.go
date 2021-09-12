@@ -8,5 +8,5 @@ import "api.card-deck/controllers"
 func main () {
 	// run server
 
-  controllers.InitRouter()
+  controllers.SetupRouter().Run("localhost:8080")
 }

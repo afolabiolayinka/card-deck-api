@@ -6,13 +6,13 @@ import "strconv"
 
 import "github.com/gin-gonic/gin"
 
-import . "api.card-deck/models"
+import "api.card-deck/models"
 import "api.card-deck/utils"
 
 
 // store all card decks
 
-var decks = []Deck {}
+var decks = []*models.Deck {}
 
 
 // view to create deck of cards
@@ -25,7 +25,7 @@ func CreateDeck (c *gin.Context) {
 
 	// create instances for card suits
 
-	var clubs, diamonds, hearts, spades []Card;
+	var clubs, diamonds, hearts, spades []models.Card
 
 	// decide if query should be used or not
 	// check if the `cards` parameter exists and if it has card codes (AS, KH ...)
@@ -35,24 +35,24 @@ func CreateDeck (c *gin.Context) {
 	if (use_query) {
 		// using `cards` to created decks
 
-		clubs = CreateSuit("clubs", cards_query)
-		diamonds = append(clubs, CreateSuit("diamonds", cards_query)...)
-		hearts = append(diamonds, CreateSuit("hearts", cards_query)...)
-		spades = append(hearts, CreateSuit("spades", cards_query)...)
+		clubs = utils.CreateSuit("clubs", cards_query)
+		diamonds = append(clubs, utils.CreateSuit("diamonds", cards_query)...)
+		hearts = append(diamonds, utils.CreateSuit("hearts", cards_query)...)
+		spades = append(hearts, utils.CreateSuit("spades", cards_query)...)
 	} else {
 		// create deck with generic pattern of 52 cards
 
-		clubs = CreateSuit("clubs")
-		diamonds = append(clubs, CreateSuit("diamonds")...)
-		hearts = append(diamonds, CreateSuit("hearts")...)
-		spades = append(hearts, CreateSuit("spades")...)
+		clubs = utils.CreateSuit("clubs")
+		diamonds = append(clubs, utils.CreateSuit("diamonds")...)
+		hearts = append(diamonds, utils.CreateSuit("hearts")...)
+		spades = append(hearts, utils.CreateSuit("spades")...)
 	}
 
 	// collect all card suits
 
 	cards := spades
 
-	// create instance of a new `Deck`
+	// create instance of a new `*models.Deck`
 	// - `Deck_id` -> string -> unique UUID of each deck
 	// - `Cards` -> [] Cards -> all cards available in deck
 	// - `shuffled` -> bool -> if the deck has been shuffled or not
@@ -64,7 +64,7 @@ func CreateDeck (c *gin.Context) {
 
 	// deck to be added to `decks`
 
-	var __new_deck Deck = Deck {
+	var __new_deck models.Deck = models.Deck {
 		Deck_id: new_deck_id,
 		Cards: cards,
 		Shuffled: false,
@@ -73,11 +73,11 @@ func CreateDeck (c *gin.Context) {
 
 	// add `__new_deck` to `decks`
 
-	decks = append(decks, __new_deck)
+	decks = append(decks, &__new_deck)
 
 	// `decks` to be returned in response
 
-	var new_deck Deck = Deck {
+	var new_deck models.Deck = models.Deck {
 		Deck_id: new_deck_id,
 		Shuffled: false,
 		Remaining: len(cards),
@@ -107,7 +107,7 @@ func OpenDeck (c *gin.Context) {
 
   // raise `StatusNotFound` -> `not_found` if deck_id is not found
 
-  c.IndentedJSON(http.StatusNotFound, gin.H {"not_found": "Deck not found"})
+  c.IndentedJSON(http.StatusNotFound, gin.H {"not_found": "*models.Deck not found"})
 }
 
 
@@ -135,7 +135,7 @@ func DrawCard (c *gin.Context) {
 
 	// store cards with length of query parameter value of `count`
 
-	var cards = []Card {}
+	var cards = []models.Card {}
 
 	// linear search for deck using `deck_id`
 
@@ -155,14 +155,14 @@ func DrawCard (c *gin.Context) {
 
     	for card_index := 0; card_index < count; card_index++ {
 
-    		// update (card -> Card) to (cards []Card)
+    		// update (card -> *models.Card) to (cards []*models.Card)
 
     		cards = append(cards, deck.Cards[card_index])
     	}
 
-    	// create instance of `ProxyDeck` model using array -> `cards`
+    	// create instance of `*models.ProxyDeck` model using array -> `cards`
 
-    	cards_proxy := ProxyDeck {
+    	cards_proxy := models.ProxyDeck {
     		Cards: cards,
     	}
 
@@ -175,5 +175,5 @@ func DrawCard (c *gin.Context) {
 
   // raise `StatusNotFound` -> `not_found` if deck does not exist
 
-  c.IndentedJSON(http.StatusNotFound, gin.H {"not_found": "Deck not found"})
+  c.IndentedJSON(http.StatusNotFound, gin.H {"not_found": "*models.Deck not found"})
 }
